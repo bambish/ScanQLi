@@ -9,6 +9,8 @@ from termcolor import colored
 reponsetime = None
 currenttested = None
 cookies = None
+verbose = False
+vulnscanstrated = False
 
 def GetHref(html):
     soup = BeautifulSoup(html)
@@ -53,18 +55,22 @@ def GetLinks(url, html):
 
 def CheckBlackListURLs(url):
     for ban in config.BannedURLs:
-        if ban in url:
+        if ban in url or ban == url:
             return True
     return False
 
 def GetHTML(url):
     global reponsetime
     global cookies
+    global verbose
+    global vulnscanstrated
     
     try:
         if not CheckBlackListURLs(url):
-            print(url)
+            if verbose and vulnscanstrated:
+                bar.printabove("[GET] " + url)
             starttime = time.time()
+            # print(cookies)
             r = requests.get(url, cookies=cookies)
             endtime = time.time()
             if reponsetime and (reponsetime * 3 > endtime - starttime):
@@ -81,8 +87,12 @@ def GetHTML(url):
 def PostData(url, data):
     global reponsetime
     global cookies
+    global verbose
+    global vulnscanstrated
     
     if url not in config.BannedURLs:
+        if verbose and vulnscanstrated:
+                bar.printabove("[POST] " + url + " [PARAM] " + str(data))
         starttime = time.time()
         r = requests.post(url, data=data, cookies=cookies)
         endtime = time.time()
@@ -333,6 +343,17 @@ def CheckPageListAllVulns(pageset):
     
     bar.delbar()
     return payload
+
+def CheckFilePerm(filename):
+    try:
+        output = open(filename,"a+")
+        output.close()
+    except:
+        return 0
+    return 1
+
+def PrintError(command, errormsg):
+    print(colored("ERROR: ", "red", attrs=["bold"]) + colored(command, attrs=["bold"]) + " : " + errormsg)
 
 # print(PostData("http://challenge01.root-me.org/web-serveur/ch9/", {"login":" '", "password":" '"}))
 # print(CheckURLQuery("http://challenge01.root-me.org/web-serveur/ch9/?action=news&news_id=2"))
