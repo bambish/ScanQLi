@@ -10,6 +10,10 @@ import optparse
 import validators
 import progressbar
 import json
+from operator import is_not
+from functools import partial
+import logo
+
 
 # url = "http://challenge01.root-me.org/web-serveur/ch18/"
 # url = "http://challenge01.root-me.org/web-serveur/ch9/"
@@ -31,17 +35,21 @@ import json
 # url = "http://challenge01.root-me.org/realiste/ch1/" # False positive
 
 # Define parser
-parser = optparse.OptionParser(formatter=optparse_mooi.CompactHelpFormatter(align_long_opts=True, metavar_column=20))
+examples_message = """\nExamples:
+  scanqli.py -u 'http://127.0.0.1/test/?p=news' -o output.log\n  scanqli.py -u 'https://127.0.0.1/test/' -r -c '{"PHPSESSID":"4bn7uro8qq62ol4o667bejbqo3" , "Session":"Mzo6YWMwZGRmOWU2NWQ1N2I2YTU2YjI0NTMzODZjZDVkYjU="}'\n"""
+logo_message = logo.chooselogo()
+
+parser = optparse.OptionParser(description=logo_message, usage = "scanqli.py -u [url] [options]", epilog = examples_message, formatter=optparse_mooi.CompactHelpFormatter(align_long_opts=True, metavar_column=20))
 groupscan = optparse.OptionGroup(parser, "Scanning")
 groupoutput = optparse.OptionGroup(parser, "Output")
 
 groupscan.add_option('-u', "--url", action="store", dest="url", help="URL to scan", default=None)
-# groupscan.add_option('-U', "--urllist", action="store", metavar="file", dest="urllist", help="URL list to scan (one line by url)", default=None)
-groupscan.add_option('-r', "--recursive", action="store_true", dest="recursive", help="Recursive URL scan (will follow each href)", default=False)
+groupscan.add_option('-U', "--urllist", action="store", metavar="file", dest="urllist", help="URL list to scan (one line by url)", default=None)
 groupscan.add_option('-i', "--ignore", action="append", metavar="url", dest="iurl", help="Ignore given URLs during scan", default=None)
-groupscan.add_option('-I', "--ignorelist", action="store", metavar="file", dest="iurllist", help="Ignore given URLs list during scan (one line by url)", default=None)
-groupscan.add_option('-c', "--cookies", action="store", metavar="cookies", dest="cookies", help="Ignore given URLs during scan", default=None, type=str)
+groupscan.add_option('-I', "--ignorelist", action="store", metavar="file", dest="iurllist", help="Ignore given URLs list (one line by url)", default=None)
+groupscan.add_option('-c', "--cookies", action="store", metavar="cookies", dest="cookies", help="Scan with given cookies", default=None, type=str)
 groupscan.add_option('-q', "--quick", action="store_true", dest="quick", help="Check only very basic vulns", default=None)
+groupscan.add_option('-r', "--recursive", action="store_true", dest="recursive", help="Recursive URL scan (will follow each href)", default=False)
 groupoutput.add_option('-v', "--verbose", action="store_true", dest="verbose", help="Display all tested URLs", default=False)
 groupoutput.add_option('-o', "--output", action="store", metavar="file", dest="output", help="Write outputs in file", default=None)
 parser.add_option_group(groupscan)
@@ -50,11 +58,22 @@ parser.add_option_group(groupoutput)
 options, args = parser.parse_args()
 
 # Check requiered arg
-if not options.url:
+if not options.url and not options.urllist:
     parser.print_help()
     exit(0)
-elif validators.url(options.url):
-    url = options.url
+elif options.url and validators.url(options.url):
+    url = [options.url]
+elif options.urllist:
+    text_file = open(options.urllist, "r")
+    url = text_file.read().split('\n')
+    url = filter(partial(is_not, ""), url)
+    for infile in url:
+        if not validators.url(infile):
+            # parser.print_help()
+            function.PrintError("-u " + infile, "Malformed URL. Please given a valid URL")
+            exit(0)
+    # print(ur
+    # exit(0)
 else:
     function.PrintError("-u " + options.url, "Malformed URL. Please given a valid URL")
     exit(0)
@@ -107,14 +126,22 @@ config.init()
 # Start
 starttime = time.time()
 
+print(logo.chooselogo() + "\n")
+
 if options.recursive:
-    baseurl = function.GetCurrentDir(url)
-    print("Base URL = " + baseurl + "\n")
+    baseurl = []
+    for uniturl in url:
+        baseurl.append(uniturl)
+        print("Base URL = " + uniturl)
     pageset = function.GetAllPages(baseurl)
-    print(str(len(pageset)) + " URL found")
+    print(str(len(pageset)) + " URLs founds")
 else:
-    print("URL = " + url + "\n")
-    pageset = {url:function.GetHTML(url)}
+    pageset = {None:None}
+    for uniturl in url:
+        print("URL = " + uniturl)
+        pageset.update({uniturl:function.GetHTML(uniturl)})
+    pageset.pop(None)
+
 print("----------------------------")
 function.vulnscanstrated = True
 result = function.CheckPageListAllVulns(pageset)
@@ -124,4 +151,4 @@ if len(result) <= 1:
     print(colored(str(len(result)) + " vulnerability ", attrs=["bold"])  + "found in " + str(round(time.time() - starttime, 2)) + " seconds!")
     # colored("[GET] ", "green", attrs=["bold"])
 else:
-    print(colored(str(len(result)) + " vulnerabilities ", attrs=["bold"])  + "found in " + str(round(time.time() - starttime, 2)) + " seconds!")
+    print(colored(str(len(result)) + " vulnerabilities ", attrs=["bold"])  + "founds in " + str(round(time.time() - starttime, 2)) + " seconds!")

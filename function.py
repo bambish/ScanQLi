@@ -143,29 +143,39 @@ def GetAllURLsParams(url):
     base = urlparsed.scheme + "://" + urlparsed.netloc + urlparsed.path
     return ConcatURLParams(base, GetParams(url))
 
-def GetAllPages(url):
-    html = GetHTML(url)
-    links = {url:html}
-    templinks = GetLinks(url, html)
-    templinks.update(GetAllURLsParams(url))
-    linksfollowed = {url}
-    newlinks = {url}
+def GetAllPages(urllist):
+
+    # print(urllist)
+
+    links = {None:None}
+    templinks = {None}
+    linksfollowed = {None}
+    newlinks = {None}
+
+    for url in urllist:
+        # print(url)
+        html = GetHTML(url)
+        links.update({url:html})
+        templinks.update(GetLinks(url, html))
+        templinks.update(GetAllURLsParams(url))
+        linksfollowed.update(url)
+        newlinks.update(url)
+
+    links.pop(None)
+    templinks.remove(None)
+    linksfollowed.remove(None)
+    newlinks.remove(None)
+
     bar = progressbar.progressbar("count", "Get URLs")
-    # bar.progress()
     while templinks:
-        # bar.totalcount += len(templinks)
         bar.progress(len(templinks))
-        # bar.progress(1)
-        # time.sleep(5)
         for link in templinks:
             html = GetHTML(link)
             links.update({link:html})
             newlinks.update(GetLinks(link, html))
             newlinks.update(GetAllURLsParams(link))
             linksfollowed.update({link})
-            # print(link)
         templinks = newlinks.difference(linksfollowed)
-    # time.sleep(5)
     bar.delbar()
 
     result = {}
@@ -174,7 +184,35 @@ def GetAllPages(url):
             result.update({link:links[link]})
 
     return result
-    # return links
+
+
+# def GetAllPages(url):
+#     html = GetHTML(url)
+#     links = {url:html}
+#     templinks = GetLinks(url, html)
+#     templinks.update(GetAllURLsParams(url))
+#     print(templinks)
+#     exit(0)
+#     linksfollowed = {url}
+#     newlinks = {url}
+#     bar = progressbar.progressbar("count", "Get URLs")
+#     while templinks:
+#         bar.progress(len(templinks))
+#         for link in templinks:
+#             html = GetHTML(link)
+#             links.update({link:html})
+#             newlinks.update(GetLinks(link, html))
+#             newlinks.update(GetAllURLsParams(link))
+#             linksfollowed.update({link})
+#         templinks = newlinks.difference(linksfollowed)
+#     bar.delbar()
+
+#     result = {}
+#     for link in links:
+#         if not CheckBlackListURLs(link):
+#             result.update({link:links[link]})
+
+#     return result
 
 def CheckValidProof(html):
     validproof = []
