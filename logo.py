@@ -1,67 +1,22 @@
 import random
+import base64
+from termcolor import colored
 
 logolist = [
-""" ____  ____  ____  ____  ____  ____  ____ 
-||S ||||c ||||a ||||n ||||Q ||||L ||||i ||
-||__||||__||||__||||__||||__||||__||||__||
-|/__\||/__\||/__\||/__\||/__\||/__\||/__\|""",
-"""   ____                   ____    __    _ 
-  / __/ ____ ___ _  ___  / __ \  / /   (_)
- _\ \  / __// _ `/ / _ \/ /_/ / / /__ / / 
-/___/  \__/ \_,_/ /_//_/\___\_\/____//_/ """,
-"""________                       _______ ______ _____ 
-__  ___/_____________ ________ __  __ \___  / ___(_)
-_____ \ _  ___/_  __ `/__  __ \_  / / /__  /  __  / 
-____/ / / /__  / /_/ / _  / / // /_/ / _  /____  /  
-/____/  \___/  \__,_/  /_/ /_/ \___\_\ /_____//_/   """,
-"""______________________________________________________
-      __                             __      _        
-    /    )                         /    )    /       ,
-----\---------__-----__-----__----/----/----/---------
-     \      /   '  /   )  /   )  /  \ /    /       /  
-_(____/____(___ __(___(__/___/__(____X____/____/__/___
-                                      \               """,
-"""   _|_|_|                                      _|_|       _|         _|  
- _|           _|_|_|     _|_|_|   _|_|_|     _|    _|     _|             
-   _|_|     _|         _|    _|   _|    _|   _|  _|_|     _|         _|  
-       _|   _|         _|    _|   _|    _|   _|    _|     _|         _|  
- _|_|_|       _|_|_|     _|_|_|   _|    _|     _|_|  _|   _|_|_|_|   _|""",
-"""      #######                                             # ###         ##### /               
-    /       ###                                         /  /###      ######  /          #     
-   /         ##                                        /  /  ###    /#   /  /          ###    
-   ##        #                                        /  ##   ###  /    /  /            #     
-    ###                                              /  ###    ###     /  /                   
-   ## ###           /###       /###    ###  /###    ##   ##     ##    ## ##           ###     
-    ### ###        / ###  /   / ###  /  ###/ #### / ##   ##     ##    ## ##            ###    
-      ### ###     /   ###/   /   ###/    ##   ###/  ##   ##     ##    ## ##             ##    
-        ### /##  ##         ##    ##     ##    ##   ##   ##     ##    ## ##             ##    
-          #/ /## ##         ##    ##     ##    ##   ##   ##     ##    ## ##             ##    
-           #/ ## ##         ##    ##     ##    ##    ##  ## ### ##    #  ##             ##    
-            # /  ##         ##    ##     ##    ##     ## #   ####        /              ##    
-  /##        /   ###     /  ##    /#     ##    ##      ###     /##   /##/           /   ##    
- /  ########/     ######/    ####/ ##    ###   ###      ######/ ##  /  ############/    ### / 
-/     #####        #####      ###   ##    ###   ###       ###   ## /     #########       ##/  
-|                                                               ## #                          
- \)                                                             /   ##                        
-                                                               /                              
-                                                              /                               """,
-"""   ___         ___     ___     ___    __   _   __                        __  
-  / _ \       / _ \   / _ \   / _ \  /_ | (_) / /     CHANCE TO GET   _  \ \ 
- | | | |     | | | | | | | | | | | |  | |    / /       THIS HEADER   (_)  | |
- | | | |     | | | | | | | | | | | |  | |   / /                           | |
- | |_| |  _  | |_| | | |_| | | |_| |  | |  / / _         YOU ARE      _   | |
-  \___/  (_)  \___/   \___/   \___/   |_| /_/ (_)         LUCKY!     ( )  | |
-                                                                     |/  /_/ 
-========================= THANK YOU TO USE ScanQLi ========================= """
+    "ICAgX19fXyAgICAgICAgICAgICAgICAgICBfX19fICAgIF9fICAgIF8gCiAgLyBfXy8gX19fXyBfX18gXyAgX19fICAvIF9fIFwgIC8gLyAgIChfKQogX1wgXCAgLyBfXy8vIF8gYC8gLyBfIFwvIC9fLyAvIC8gL19fIC8gLyAKL19fXy8gIFxfXy8gXF8sXy8gL18vL18vXF9fX1xfXC9fX19fLy9fLyA=",
+    "IF9fX18gIF9fX18gIF9fX18gIF9fX18gIF9fX18gIF9fX18gIF9fX18gCnx8UyB8fHx8YyB8fHx8YSB8fHx8biB8fHx8USB8fHx8TCB8fHx8aSB8fAp8fF9ffHx8fF9ffHx8fF9ffHx8fF9ffHx8fF9ffHx8fF9ffHx8fF9ffHwKfC9fX1x8fC9fX1x8fC9fX1x8fC9fX1x8fC9fX1x8fC9fX1x8fC9fX1x8",
+    "X19fX19fX18gICAgICAgICAgICAgICAgICAgICAgIF9fX19fX18gX19fX19fIF9fX19fIApfXyAgX19fL19fX19fX19fX19fX18gX19fX19fX18gX18gIF9fIFxfX18gIC8gX19fKF8pCl9fX19fIFwgXyAgX19fL18gIF9fIGAvX18gIF9fIFxfICAvIC8gL19fICAvICBfXyAgLyAKX19fXy8gLyAvIC9fXyAgLyAvXy8gLyBfICAvIC8gLy8gL18vIC8gXyAgL19fX18gIC8gIAovX19fXy8gIFxfX18vICBcX18sXy8gIC9fLyAvXy8gXF9fX1xfXCAvX19fX18vL18vICAg",
+    "X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCiAgICAgIF9fICAgICAgICAgICAgICAgICAgICAgICAgICAgICBfXyAgICAgIF8gICAgICAgIAogICAgLyAgICApICAgICAgICAgICAgICAgICAgICAgICAgIC8gICAgKSAgICAvICAgICAgICwKLS0tLVwtLS0tLS0tLS1fXy0tLS0tX18tLS0tLV9fLS0tLS8tLS0tLy0tLS0vLS0tLS0tLS0tCiAgICAgXCAgICAgIC8gICAnICAvICAgKSAgLyAgICkgIC8gIFwgLyAgICAvICAgICAgIC8gIApfKF9fX18vX19fXyhfX18gX18oX19fKF9fL19fXy9fXyhfX19fWF9fX18vX19fXy9fXy9fX18KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcICAgICAgICAgICAgICAg",
+    "ICAgICAgIyMjIyMjIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMgIyMjICAgICAgICAgIyMjIyMgLyAgICAgICAgICAgICAgIAogICAgLyAgICAgICAjIyMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC8gIC8jIyMgICAgICAjIyMjIyMgIC8gICAgICAgICAgIyAgICAgCiAgIC8gICAgICAgICAjIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAvICAvICAjIyMgICAgLyMgICAvICAvICAgICAgICAgICMjIyAgICAKICAgIyMgICAgICAgICMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLyAgIyMgICAjIyMgIC8gICAgLyAgLyAgICAgICAgICAgICMgICAgIAogICAgIyMjICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC8gICMjIyAgICAjIyMgICAgIC8gIC8gICAgICAgICAgICAgICAgICAgCiAgICMjICMjIyAgICAgICAgICAgLyMjIyAgICAgICAvIyMjICAgICMjIyAgLyMjIyAgICAjIyAgICMjICAgICAjIyAgICAjIyAjIyAgICAgICAgICAgIyMjICAgICAKICAgICMjIyAjIyMgICAgICAgIC8gIyMjICAvICAgLyAjIyMgIC8gICMjIy8gIyMjIyAvICMjICAgIyMgICAgICMjICAgICMjICMjICAgICAgICAgICAgIyMjICAgIAogICAgICAjIyMgIyMjICAgICAvICAgIyMjLyAgIC8gICAjIyMvICAgICMjICAgIyMjLyAgIyMgICAjIyAgICAgIyMgICAgIyMgIyMgICAgICAgICAgICAgIyMgICAgCiAgICAgICAgIyMjIC8jIyAgIyMgICAgICAgICAjIyAgICAjIyAgICAgIyMgICAgIyMgICAjIyAgICMjICAgICAjIyAgICAjIyAjIyAgICAgICAgICAgICAjIyAgICAKICAgICAgICAgICMvIC8jIyAjIyAgICAgICAgICMjICAgICMjICAgICAjIyAgICAjIyAgICMjICAgIyMgICAgICMjICAgICMjICMjICAgICAgICAgICAgICMjICAgIAogICAgICAgICAgICMvICMjICMjICAgICAgICAgIyMgICAgIyMgICAgICMjICAgICMjICAgICMjICAjIyAjIyMgIyMgICAgIyAgIyMgICAgICAgICAgICAgIyMgICAgCiAgICAgICAgICAgICMgLyAgIyMgICAgICAgICAjIyAgICAjIyAgICAgIyMgICAgIyMgICAgICMjICMgICAjIyMjICAgICAgICAvICAgICAgICAgICAgICAjIyAgICAKICAvIyMgICAgICAgIC8gICAjIyMgICAgIC8gICMjICAgIC8jICAgICAjIyAgICAjIyAgICAgICMjIyAgICAgLyMjICAgLyMjLyAgICAgICAgICAgLyAgICMjICAgIAogLyAgIyMjIyMjIyMvICAgICAjIyMjIyMvICAgICMjIyMvICMjICAgICMjIyAgICMjIyAgICAgICMjIyMjIy8gIyMgIC8gICMjIyMjIyMjIyMjIy8gICAgIyMjIC8gCi8gICAgICMjIyMjICAgICAgICAjIyMjIyAgICAgICMjIyAgICMjICAgICMjIyAgICMjIyAgICAgICAjIyMgICAjIyAvICAgICAjIyMjIyMjIyMgICAgICAgIyMvICAKfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMjICMgICAgICAgICAgICAgICAgICAgICAgICAgIAogXCkgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLyAgICMjICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC8gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAvICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA==",
+    "ICAgX19fICAgICAgICAgX19fICAgICBfX18gICAgIF9fXyAgICBfXyAgIF8gICBfXyAgICAgICAgICAgICAgICAgICAgICAgIF9fICAKICAvIF8gXCAgICAgICAvIF8gXCAgIC8gXyBcICAgLyBfIFwgIC9fIHwgKF8pIC8gLyAgICAgQ0hBTkNFIFRPIEdFVCAgIF8gIFwgXCAKIHwgfCB8IHwgICAgIHwgfCB8IHwgfCB8IHwgfCB8IHwgfCB8ICB8IHwgICAgLyAvICAgICAgIFRISVMgSEVBREVSICAgKF8pICB8IHwKIHwgfCB8IHwgICAgIHwgfCB8IHwgfCB8IHwgfCB8IHwgfCB8ICB8IHwgICAvIC8gICAgICAgICAgICAgICAgICAgICAgICAgICB8IHwKIHwgfF98IHwgIF8gIHwgfF98IHwgfCB8X3wgfCB8IHxffCB8ICB8IHwgIC8gLyBfICAgICAgICAgWU9VIEFSRSAgICAgIF8gICB8IHwKICBcX19fLyAgKF8pICBcX19fLyAgIFxfX18vICAgXF9fXy8gICB8X3wgL18vIChfKSAgICAgICAgIExVQ0tZISAgICAgKCApICB8IHwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfC8gIC9fLyAKPT09PT09PT09PT09PT09PT09PT09PT09PSBUSEFOSyBZT1UgVE8gVVNFIFNjYW5RTGkgPT09PT09PT09PT09PT09PT09PT09PT09PSA="
 ]
 
 def chooselogo():
+    contact = "\n\nhttps://github.com/bambish\nhttps://twitter.com/bambishee"
     if random.randint(1, 100) > 90:
         if random.randint(1, 1000000) == 1:
-            return logolist[len(logolist) - 1] + "\n\nhttps://github.com/bambish\nhttps://twitter.com/bambishee"    
+            return base64.b64decode(logolist[len(logolist) - 1]) + contact    
         else:
-            return logolist[random.randint(0, len(logolist) - 2)] + "\n\nhttps://github.com/bambish\nhttps://twitter.com/bambishee"
+            return base64.b64decode(logolist[random.randint(1, len(logolist) - 2)]) + contact
     else:
-        return logolist[1] + "\n\nhttps://github.com/bambish\nhttps://twitter.com/bambishee"
-
-# print(chooselogo())
+        return base64.b64decode(logolist[0]) + contact

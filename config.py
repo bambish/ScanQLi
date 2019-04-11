@@ -119,7 +119,3 @@ def init():
         return True
     else:
         return False
-
-# print("\xbf\x27")
-# print(PayloadsTimeBase())
-# print(PayloadsBlind())

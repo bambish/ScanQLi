@@ -11,6 +11,8 @@ currenttested = None
 cookies = None
 verbose = False
 vulnscanstrated = False
+vulnpages = {None}
+waittime = 0
 
 def GetHref(html):
     soup = BeautifulSoup(html)
@@ -50,7 +52,6 @@ def GetLinks(url, html):
             links.append(CraftURL(url, href))
         elif href[:len(baseurl)] == baseurl:
             links.append(href)
-    # print(links)
     return set(links)
 
 def CheckBlackListURLs(url):
@@ -64,13 +65,14 @@ def GetHTML(url):
     global cookies
     global verbose
     global vulnscanstrated
+    global waittime
     
     try:
         if not CheckBlackListURLs(url):
             if verbose and vulnscanstrated:
                 bar.printabove("[GET] " + url)
+            time.sleep(waittime)
             starttime = time.time()
-            # print(cookies)
             r = requests.get(url, cookies=cookies)
             endtime = time.time()
             if reponsetime and (reponsetime * 3 > endtime - starttime):
@@ -89,10 +91,12 @@ def PostData(url, data):
     global cookies
     global verbose
     global vulnscanstrated
+    global waittime
     
     if url not in config.BannedURLs:
         if verbose and vulnscanstrated:
                 bar.printabove("[POST] " + url + " [PARAM] " + str(data))
+        time.sleep(waittime)
         starttime = time.time()
         r = requests.post(url, data=data, cookies=cookies)
         endtime = time.time()
@@ -144,16 +148,12 @@ def GetAllURLsParams(url):
     return ConcatURLParams(base, GetParams(url))
 
 def GetAllPages(urllist):
-
-    # print(urllist)
-
     links = {None:None}
     templinks = {None}
     linksfollowed = {None}
     newlinks = {None}
 
     for url in urllist:
-        # print(url)
         html = GetHTML(url)
         links.update({url:html})
         templinks.update(GetLinks(url, html))
@@ -184,35 +184,6 @@ def GetAllPages(urllist):
             result.update({link:links[link]})
 
     return result
-
-
-# def GetAllPages(url):
-#     html = GetHTML(url)
-#     links = {url:html}
-#     templinks = GetLinks(url, html)
-#     templinks.update(GetAllURLsParams(url))
-#     print(templinks)
-#     exit(0)
-#     linksfollowed = {url}
-#     newlinks = {url}
-#     bar = progressbar.progressbar("count", "Get URLs")
-#     while templinks:
-#         bar.progress(len(templinks))
-#         for link in templinks:
-#             html = GetHTML(link)
-#             links.update({link:html})
-#             newlinks.update(GetLinks(link, html))
-#             newlinks.update(GetAllURLsParams(link))
-#             linksfollowed.update({link})
-#         templinks = newlinks.difference(linksfollowed)
-#     bar.delbar()
-
-#     result = {}
-#     for link in links:
-#         if not CheckBlackListURLs(link):
-#             result.update({link:links[link]})
-
-#     return result
 
 def CheckValidProof(html):
     validproof = []
@@ -255,9 +226,6 @@ def CheckGetVuln(url, vuln, html):
     return False
 
 def CheckPostBlind(url, blindlist, fields, html):
-    # blindtrue = GetHTML(url + blindlist[0])
-    # blindfalse = GetHTML(url + blindlist[1])
-
     datatrue = {}
     datafalse = {}
     
@@ -326,7 +294,6 @@ def CheckURLQuery(url):
         return False
 
 def CheckPageVuln(url, vuln, html = None):
-    # print(url)
     if html:
         fields = {}
         soup = BeautifulSoup(html)
@@ -342,42 +309,36 @@ def CheckPageVuln(url, vuln, html = None):
         return CheckGetVuln(url, vuln, html)
 
 def CheckPageListVuln(pageset, vuln):
+    global vulnpages
     result = []
     for url in pageset:
-        payload = CheckPageVuln(url, vuln, pageset[url])
-        if payload:
-            result.append(payload)
+        if url not in vulnpages:
+            payload = CheckPageVuln(url, vuln, pageset[url])
+            if payload:
+                vulnpages.update({url})
+                result.append(payload)
     return result
 
 def CheckPageListAllVulns(pageset):
-    result = []
-    checkbreak = False
-
     global bar
     global currenttested
+    result = []
 
     bar = progressbar.progressbar("bar", "Search vulns")
     bar.totalcount = len(config.vulncheck)
     bar.count = 0
 
     for vulnlist in config.vulncheck:
-        if checkbreak:
-            break
         bar.total = len(vulnlist[0])
         bar.value = 0
         bar.count += 1
         currenttested = vulnlist[1]
         for vuln in vulnlist[0]:
-            # bar.printabove("total = " + str(bar.total))
-            # bar.printabove("value = " + str(bar.value))
             bar.progress(1)
             payload = CheckPageListVuln(pageset, vuln)
             if payload:
                 result.append(payload)
-                checkbreak = True
                 break
-        # bar.delbar()
-        # print("")
     
     bar.delbar()
     return payload
@@ -392,7 +353,3 @@ def CheckFilePerm(filename):
 
 def PrintError(command, errormsg):
     print(colored("ERROR: ", "red", attrs=["bold"]) + colored(command, attrs=["bold"]) + " : " + errormsg)
-
-# print(PostData("http://challenge01.root-me.org/web-serveur/ch9/", {"login":" '", "password":" '"}))
-# print(CheckURLQuery("http://challenge01.root-me.org/web-serveur/ch9/?action=news&news_id=2"))
-# print(CheckPageVuln("http://challenge01.root-me.org/web-serveur/ch18/?action=news&news_id=2", "'"))
