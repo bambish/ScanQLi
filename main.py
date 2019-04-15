@@ -17,10 +17,10 @@ import numpy
 
 # Define parser
 examples_message = """\nExamples:
-  scanqli.py -u 'http://127.0.0.1/test/?p=news' -o output.log\n  scanqli.py -u 'https://127.0.0.1/test/' -r -c '{"PHPSESSID":"4bn7uro8qq62ol4o667bejbqo3" , "Session":"Mzo6YWMwZGRmOWU2NWQ1N2I2YTU2YjI0NTMzODZjZDVkYjU="}'\n"""
+  python scanqli.py -u 'http://127.0.0.1/test/?p=news' -o output.log\n  python scanqli.py -u 'https://127.0.0.1/test/' -r -c '{"PHPSESSID":"4bn7uro8qq62ol4o667bejbqo3" , "Session":"Mzo6YWMwZGRmOWU2NWQ1N2I2YTU2YjI0NTMzODZjZDVkYjU="}'\n"""
 logo_message = logo.chooselogo()
 
-parser = optparse.OptionParser(description=logo_message, usage = "scanqli.py -u [url] [options]", epilog = examples_message, formatter=optparse_mooi.CompactHelpFormatter(align_long_opts=True, metavar_column=20))
+parser = optparse.OptionParser(description=logo_message, usage = "python scanqli.py -u [url] [options]", epilog = examples_message, formatter=optparse_mooi.CompactHelpFormatter(align_long_opts=True, metavar_column=20))
 groupscan = optparse.OptionGroup(parser, "Scanning")
 groupoutput = optparse.OptionGroup(parser, "Output")
 

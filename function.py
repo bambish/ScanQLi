@@ -1,5 +1,5 @@
 import requests
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import config
 import time
 import urlparse
@@ -15,7 +15,7 @@ vulnpages = {None}
 waittime = 0
 
 def GetHref(html):
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, "lxml")
     hreflist = []
     for link in soup.findAll('a'):
         href = link.get('href')
@@ -296,7 +296,7 @@ def CheckURLQuery(url):
 def CheckPageVuln(url, vuln, html = None):
     if html:
         fields = {}
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, "lxml")
         for link in soup.findAll('input'):
             field = link.get('name')
             if field:

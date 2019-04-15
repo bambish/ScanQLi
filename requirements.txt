@@ -1,7 +1,7 @@
-requests==2.12.4
-termcolor==1.1.0
-optparse-pretty==0.1.1
-validators==0.12.4
-# BeautifulSoup==3.2.1
-beautifulsoup4==4.5.3
-urllib3==1.19.1
+requests>=2.12.4
+termcolor>=1.1.0
+optparse-pretty>=0.1.1
+validators>=0.12.4
+beautifulsoup4>=4.5.3
+urllib3>=1.19.1
+numpy>=1.12.1
