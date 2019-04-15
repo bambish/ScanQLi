@@ -13,6 +13,7 @@ import json
 from operator import is_not
 from functools import partial
 import logo
+import numpy
 
 # Define parser
 examples_message = """\nExamples:
@@ -126,13 +127,16 @@ try:
     print("----------------------------")
     function.vulnscanstrated = True
     result = function.CheckPageListAllVulns(pageset)
+    # print(result)
+    # print(numpy.shape(result)[0] * numpy.shape(result)[1])
 
 except KeyboardInterrupt:
     print("\nStopped after " + str(round(time.time() - starttime, 2)) + " seconds")
     exit(0)
 
 print("----------------------------")
-if len(result) <= 1:
-    print(colored(str(len(result)) + " vulnerability ", attrs=["bold"])  + "found in " + str(round(time.time() - starttime, 2)) + " seconds!")
+resultlen = numpy.shape(result)[0] * numpy.shape(result)[1]
+if resultlen <= 1:
+    print(colored(str(resultlen) + " vulnerability ", attrs=["bold"])  + "found in " + str(round(time.time() - starttime, 2)) + " seconds!")
 else:
-    print(colored(str(len(result)) + " vulnerabilities ", attrs=["bold"])  + "founds in " + str(round(time.time() - starttime, 2)) + " seconds!")
+    print(colored(str(resultlen) + " vulnerabilities ", attrs=["bold"])  + "founds in " + str(round(time.time() - starttime, 2)) + " seconds!")

@@ -341,7 +341,7 @@ def CheckPageListAllVulns(pageset):
                 break
     
     bar.delbar()
-    return payload
+    return result
 
 def CheckFilePerm(filename):
     try:
