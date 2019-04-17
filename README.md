@@ -2,7 +2,8 @@
 
 ![Screenshot](https://github.com/bambish/ScanQLi/blob/master/.screenshots/scanqli.jpg)
 
-ScanQLi is a simple SQL injection scanner with somes additionals features. This tool can't exploit the SQLi, it just detect their.
+ScanQLi is a simple SQL injection scanner with somes additionals features. This tool can't exploit the SQLi, it just detect them.
+_Tested on Debian 9_
 
 ### Features
 ----
