@@ -2,16 +2,20 @@
 
 ![Screenshot](https://github.com/bambish/ScanQLi/blob/master/.screenshots/scanqli.jpg)
 
-ScanQLi is a simple SQL injection scanner with somes additionals features like recurise scan or cookies integration. This tool can detect severals types of SQLi:
+ScanQLi is a simple SQL injection scanner with somes additionals features. This tool can't exploit the SQLi, it just detect their.
+
+### Features
+----
+
 * Classic
 * Blind
 * Time based
 * _GBK (soon)_
 
-Tested with:
-* Debian 9
-* Python 2.7
-* Python 3.5
+* Recursive scan (follow all hrefs of the scanned web site)
+* Cookies integration
+* Adjustable wait delay between requests
+* Ignore given URLs
 
 ### Prerequisites
 ----
