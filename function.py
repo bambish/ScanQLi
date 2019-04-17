@@ -2,7 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 import config
 import time
-import urlparse
+try:
+    import urlparse # Python2
+except ImportError:
+    import urllib.parse as urlparse # Python3
 import progressbar
 from termcolor import colored
 
@@ -102,7 +105,7 @@ def PostData(url, data):
         endtime = time.time()
 
         if reponsetime and ((reponsetime * 2) > (endtime - starttime)):
-            reponsetime = (reponsetime + (endtime - starttime)) / 2    
+            reponsetime = (reponsetime + (endtime - starttime)) / 2
         elif reponsetime == None:
             reponsetime = endtime - starttime
         return r.text
