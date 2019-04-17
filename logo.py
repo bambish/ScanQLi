@@ -15,8 +15,8 @@ def chooselogo():
     contact = "\n\nhttps://github.com/bambish\nhttps://twitter.com/bambishee"
     if random.randint(1, 100) > 90:
         if random.randint(1, 1000000) == 1:
-            return base64.b64decode(logolist[len(logolist) - 1]) + contact    
+            return base64.b64decode(logolist[len(logolist) - 1]) + contact
         else:
             return base64.b64decode(logolist[random.randint(1, len(logolist) - 2)]) + contact
     else:
-        return base64.b64decode(logolist[0]) + contact
+        return base64.b64decode(logolist[0]).decode('utf-8') + contact

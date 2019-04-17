@@ -127,8 +127,6 @@ try:
     print("----------------------------")
     function.vulnscanstrated = True
     result = function.CheckPageListAllVulns(pageset)
-    # print(result)
-    # print(numpy.shape(result)[0] * numpy.shape(result)[1])
 
 except KeyboardInterrupt:
     print("\nStopped after " + str(round(time.time() - starttime, 2)) + " seconds")

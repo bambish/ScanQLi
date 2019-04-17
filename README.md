@@ -5,26 +5,26 @@ SQLi scanner.
 Tested on:
 * Debian 9
 
-### Installing
+### Prerequisites
 
-1. Install git tool
+**1.** Install git tool
 ```
 apt update
 apt install git
 ```
 
-2. Clone the repo.
+**2.** Clone the repo.
 ```
 git clone https://github.com/bambish/ScanQLi
 ```
 
-3. Install python required libs
+**3.** Install python required libs
 ```
 apt install python-pip
 cd ScanQLi
 pip install -r requirements.txt
 ```
-_For python3 please install **python3-pip** and **pip3**_
+_For python3 please install **python3-pip** and use **pip3**_
 
 ### Usage
 
