@@ -1,11 +1,20 @@
-# ScanQLi
+# ScanQLi [![License](https://img.shields.io/badge/license-GPLv3-red.svg)](https://github.com/bambish/ScanQLi/LICENSE.md) ![Python 2|3](https://img.shields.io/badge/python-2|3-yellow.svg) [![Twitter](https://img.shields.io/badge/twitter-@bambishee-blue.svg)](https://twitter.com/bambishee)
 
-SQLi scanner.
+![Screenshot](https://github.com/bambish/ScanQLi/.screenshots/scanqli.jpg)
 
-Tested on:
+ScanQLi is a simple SQL injection scanner with somes additionals features like recurise scan or cookies integration. This tool can detect severals types of SQLi:
+* Classic
+* Blind
+* Time based
+* _GBK (soon)_
+
+Tested with:
 * Debian 9
+* Python 2.7
+* Python 3.5
 
 ### Prerequisites
+----
 
 **1.** Install git tool
 ```
@@ -27,12 +36,14 @@ pip install -r requirements.txt
 _For python3 please install **python3-pip** and use **pip3**_
 
 ### Usage
+----
 
 ```
 ./scanqli -u [URL] [OPTIONS]
 ```
 
 ### Examples
+----
 
 Simple url scan with output file
 ```
