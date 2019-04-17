@@ -1,6 +1,6 @@
 # ScanQLi [![License](https://img.shields.io/badge/license-GPLv3-red.svg)](https://github.com/bambish/ScanQLi/LICENSE.md) ![Python 2|3](https://img.shields.io/badge/python-2|3-yellow.svg) [![Twitter](https://img.shields.io/badge/twitter-@bambishee-blue.svg)](https://twitter.com/bambishee)
 
-![Screenshot](https://github.com/bambish/ScanQLi/.screenshots/scanqli.jpg)
+![Screenshot](https://github.com/bambish/ScanQLi/blob/master/.screenshots/scanqli.jpg)
 
 ScanQLi is a simple SQL injection scanner with somes additionals features like recurise scan or cookies integration. This tool can detect severals types of SQLi:
 * Classic
