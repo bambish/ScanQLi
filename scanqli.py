@@ -138,7 +138,7 @@ except KeyboardInterrupt:
     print("\nStopped after " + str(round(time.time() - starttime, 2)) + " seconds")
     exit(0)
 except NameError as error:
-    function.PrintError("", error)
+    function.PrintError("", str(error))
     exit(0)
 
 print("----------------------------")

@@ -85,14 +85,11 @@ def GetHTML(url):
                 reponsetime = endtime - starttime
         else:
             return ""
-    # except requests.ConnectionError as error:
-    #     print(error)
-    #     exit()
-    except:
-        if sys.exc_info()[0] == requests.ConnectionError:
-            PrintError("Connection error", "GetHTML()")
-        else:
-            PrintError("Unknow error", "GetHTML(): " + str(sys.exc_info()[0]))
+    
+    except requests.ConnectionError as error:
+        print(error)
+        exit(0)
+    
     return r.text
 
 def PostData(url, data):
@@ -118,14 +115,10 @@ def PostData(url, data):
             return r.text
         else:
             return ""
-    # except requests.ConnectionError as error:
-    #     print(error)
-    #     exit()
-    except:
-        if sys.exc_info()[0] == requests.ConnectionError:
-            PrintError("Connection error", "PostData()")
-        else:
-            PrintError("Unknow error", "PostData(): " + str(sys.exc_info()[0]))
+    
+    except requests.ConnectionError as error:
+        print(error)
+        exit(0)
 
 def GetParams(url):
     result = []
