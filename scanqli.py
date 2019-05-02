@@ -137,9 +137,16 @@ try:
 except KeyboardInterrupt:
     print("\nStopped after " + str(round(time.time() - starttime, 2)) + " seconds")
     exit(0)
+except NameError as error:
+    function.PrintError("", error)
+    exit(0)
 
 print("----------------------------")
-resultlen = numpy.shape(result)[0] * numpy.shape(result)[1]
+try:
+    resultlen = numpy.shape(result)[0] * numpy.shape(result)[1]
+except IndexError:
+    resultlen = 0
+
 if resultlen <= 1:
     print(colored(str(resultlen) + " vulnerability ", attrs=["bold"])  + "found in " + str(round(time.time() - starttime, 2)) + " seconds!")
 else:
