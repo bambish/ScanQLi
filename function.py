@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import config
 import time
+import sys
 try:
     import urlparse # Python2
 except ImportError:
@@ -22,7 +23,7 @@ def GetHref(html):
     hreflist = []
     for link in soup.findAll('a'):
         href = link.get('href')
-        if href:
+        if href and "#" not in href:
             hreflist.append(href)
     return set(hreflist)
 
@@ -84,9 +85,14 @@ def GetHTML(url):
                 reponsetime = endtime - starttime
         else:
             return ""
-    except requests.ConnectionError as error:
-        print(error)
-        exit()
+    # except requests.ConnectionError as error:
+    #     print(error)
+    #     exit()
+    except:
+        if sys.exc_info()[0] == requests.ConnectionError:
+            PrintError("Connection error", "GetHTML()")
+        else:
+            PrintError("Unknow error", "GetHTML(): " + str(sys.exc_info()[0]))
     return r.text
 
 def PostData(url, data):
@@ -96,21 +102,30 @@ def PostData(url, data):
     global vulnscanstrated
     global waittime
     
-    if url not in config.BannedURLs:
-        if verbose and vulnscanstrated:
-                bar.printabove("[POST] " + url + " [PARAM] " + str(data))
-        time.sleep(waittime)
-        starttime = time.time()
-        r = requests.post(url, data=data, cookies=cookies)
-        endtime = time.time()
+    try:
+        if url not in config.BannedURLs:
+            if verbose and vulnscanstrated:
+                    bar.printabove("[POST] " + url + " [PARAM] " + str(data))
+            time.sleep(waittime)
+            starttime = time.time()
+            r = requests.post(url, data=data, cookies=cookies)
+            endtime = time.time()
 
-        if reponsetime and ((reponsetime * 2) > (endtime - starttime)):
-            reponsetime = (reponsetime + (endtime - starttime)) / 2
-        elif reponsetime == None:
-            reponsetime = endtime - starttime
-        return r.text
-    else:
-        return ""
+            if reponsetime and ((reponsetime * 2) > (endtime - starttime)):
+                reponsetime = (reponsetime + (endtime - starttime)) / 2
+            elif reponsetime == None:
+                reponsetime = endtime - starttime
+            return r.text
+        else:
+            return ""
+    # except requests.ConnectionError as error:
+    #     print(error)
+    #     exit()
+    except:
+        if sys.exc_info()[0] == requests.ConnectionError:
+            PrintError("Connection error", "PostData()")
+        else:
+            PrintError("Unknow error", "PostData(): " + str(sys.exc_info()[0]))
 
 def GetParams(url):
     result = []
