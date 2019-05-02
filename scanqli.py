@@ -14,6 +14,10 @@ from operator import is_not
 from functools import partial
 import logo
 import numpy
+try:
+    import urlparse # Python2
+except ImportError:
+    import urllib.parse as urlparse # Python3
 
 # Define parser
 examples_message = """\nExamples:
@@ -113,6 +117,8 @@ try:
     if options.recursive:
         baseurl = []
         for uniturl in url:
+            if uniturl[-1:] != "/" and urlparse.urlparse(uniturl).path == "":
+                uniturl = uniturl + "/"
             baseurl.append(uniturl)
             print("Base URL = " + uniturl)
         pageset = function.GetAllPages(baseurl)
