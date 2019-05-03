@@ -41,8 +41,8 @@ def GetCurrentDir(url):
 
 def CraftURL(url, href):
     href = href.replace("./", "")
-    # if url[-1:] != "/" and os.path.splitext(urlparse.urlparse(url).path)[1] == "":
-    #     url = url + "/"
+    if url[-1:] != "/" and os.path.splitext(urlparse.urlparse(url).path)[0] == "":
+        url = url + "/"
     urlsplited = urlparse.urlsplit(url)
     if href[:1] == "/":
         return urlsplited.scheme + "://" + urlsplited.netloc + href
@@ -80,7 +80,6 @@ def GetHTML(url):
                 bar.printabove("[GET] " + url)
             time.sleep(waittime)
             starttime = time.time()
-            print(url)
             r = requests.get(url, cookies=cookies)
             endtime = time.time()
             if reponsetime and (reponsetime * 3 > endtime - starttime):
