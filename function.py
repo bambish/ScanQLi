@@ -9,6 +9,7 @@ except ImportError:
     import urllib.parse as urlparse # Python3
 import progressbar
 from termcolor import colored
+import os
 
 reponsetime = None
 currenttested = None
@@ -40,6 +41,8 @@ def GetCurrentDir(url):
 
 def CraftURL(url, href):
     href = href.replace("./", "")
+    if url[-1:] != "/" and os.path.splitext(urlparse.urlparse(url).path)[1] == "":
+        url = url + "/"
     urlsplited = urlparse.urlsplit(url)
     if href[:1] == "/":
         return urlsplited.scheme + "://" + urlsplited.netloc + href

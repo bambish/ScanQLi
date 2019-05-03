@@ -14,6 +14,7 @@ from operator import is_not
 from functools import partial
 import logo
 import numpy
+import os
 try:
     import urlparse # Python2
 except ImportError:
@@ -117,7 +118,7 @@ try:
     if options.recursive:
         baseurl = []
         for uniturl in url:
-            if uniturl[-1:] != "/" and urlparse.urlparse(uniturl).path == "":
+            if uniturl[-1:] != "/" and os.path.splitext(urlparse.urlparse(uniturl).path)[1] == "":
                 uniturl = uniturl + "/"
             baseurl.append(uniturl)
             print("Base URL = " + uniturl)
