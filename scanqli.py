@@ -34,6 +34,7 @@ groupscan.add_option('-U', "--urllist", action="store", metavar="file", dest="ur
 groupscan.add_option('-i', "--ignore", action="append", metavar="url", dest="iurl", help="Ignore given URLs during scan", default=None)
 groupscan.add_option('-I', "--ignorelist", action="store", metavar="file", dest="iurllist", help="Ignore given URLs list (one line by url)", default=None)
 groupscan.add_option('-c', "--cookies", action="store", metavar="cookies", dest="cookies", help="Scan with given cookies", default=None, type=str)
+groupscan.add_option('-s', "--nosslcheck", action="store_true", dest="nosslcheck", help="Don't verify SSL certs")
 groupscan.add_option('-q', "--quick", action="store_true", dest="quick", help="Check only very basic vulns", default=None)
 groupscan.add_option('-r', "--recursive", action="store_true", dest="recursive", help="Recursive URL scan (will follow each href)", default=False)
 groupscan.add_option('-w', "--wait", action="store", metavar="seconds", dest="waittime", help="Wait time between each request", default=None, type=str)
@@ -98,6 +99,10 @@ if options.iurllist:
 # Cookies
 if options.cookies:
     function.cookies = json.loads(options.cookies)
+
+# NoSSLCheck
+if options.nosslcheck:
+    function.verifyssl = False
 
 # Wait time
 if options.waittime:

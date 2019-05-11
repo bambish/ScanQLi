@@ -11,6 +11,10 @@ import progressbar
 from termcolor import colored
 import os
 
+# Suppress insecure warning
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 reponsetime = None
 currenttested = None
 cookies = None
@@ -18,6 +22,7 @@ verbose = False
 vulnscanstrated = False
 vulnpages = {None}
 waittime = 0
+verifyssl = True
 
 def GetHref(html):
     soup = BeautifulSoup(html, "lxml")
@@ -73,6 +78,7 @@ def GetHTML(url):
     global verbose
     global vulnscanstrated
     global waittime
+    global verifyssl
     
     try:
         if not CheckBlackListURLs(url):
@@ -80,7 +86,7 @@ def GetHTML(url):
                 bar.printabove("[GET] " + url)
             time.sleep(waittime)
             starttime = time.time()
-            r = requests.get(url, cookies=cookies)
+            r = requests.get(url, cookies=cookies, verify=verifyssl)
             endtime = time.time()
             if reponsetime and (reponsetime * 3 > endtime - starttime):
                 reponsetime = (reponsetime + (endtime - starttime)) / 2    
@@ -101,6 +107,7 @@ def PostData(url, data):
     global verbose
     global vulnscanstrated
     global waittime
+    global verifyssl
     
     try:
         if url not in config.BannedURLs:
@@ -108,7 +115,7 @@ def PostData(url, data):
                     bar.printabove("[POST] " + url + " [PARAM] " + str(data))
             time.sleep(waittime)
             starttime = time.time()
-            r = requests.post(url, data=data, cookies=cookies)
+            r = requests.post(url, data=data, cookies=cookies, verify=verifyssl)
             endtime = time.time()
 
             if reponsetime and ((reponsetime * 2) > (endtime - starttime)):
