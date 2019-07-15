@@ -91,6 +91,7 @@ vulnproof = [
     # ======== MySQL =========
     "You have an error in your SQL",
     "MySQL server version for the right syntax",
+    "supplied argument is not a valid MySQL result resource",
     # ======== PostgreSQL ========
     "ERROR:  syntax error"
 ]
